@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    image: ghcr.io/Habib0905/node-server:latest 
+    container_name: node_app
+    restart: always
+    environment:
+      - PORT=3000
+    expose:
+      - "3000"
+    networks:
+      - webnet
+
+  nginx:
+    image: nginx:stable
+    container_name: nginx_proxy
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
